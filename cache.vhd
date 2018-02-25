@@ -73,7 +73,6 @@ architecture arch of cache is
 
  
 begin
-		state <=A;
        addr_word_offset <= s_addr(3 downto 2); -- word offset of address
 	   addr_byte_offset <= s_addr (1 downto 0); -- byte offset 
 	   addr_index <= s_addr(8 downto 4); -- index of address
@@ -87,20 +86,24 @@ begin
 process(clock,m_waitrequest,reset)
 begin
 
-	  if(clock'event and clock='1')then
-          s_waitrequest<='1'; 
-          m_read<='0';
-          m_write<='0';
+if(clock'event and clock='1')then
 
-
+	  s_waitrequest<='1'; 
+      m_read<='0';
+      m_write<='0';
+	
       if (state = A) then 
+
+		 report "entering A";
          if (s_read = '1' or s_write = '1') then 
             state <= B;
          end if;
        
 
       elsif (state = B) then    -- decide if the data is hit or not, valid or not  if hit, then return the value; if not, pass it to write back or memory read accordlingly;
-           if(addr_tag = block_tag and valid = '1') then 
+           
+		   report "entering B";
+		   if(addr_tag = block_tag and valid = '1') then 
 				  if(s_read = '1') then 
 					  s_readdata <= cache(index)(32*(to_integer(unsigned(addr_word_offset)))+31 downto 32*(to_integer(unsigned(addr_word_offset))));
 					  state <= E;  --signal CPU
@@ -120,7 +123,9 @@ begin
 
 
       elsif(state = C) then                  --mem read
-         if(ref_counter = 4) then
+         
+		 report "entering C";
+		 if(ref_counter = 4) then
 				ref_counter<=0;              
 				cache(index)(135)<='1';  --set valid
 				cache(index)(134)<='0';  --set not dirty
@@ -136,7 +141,9 @@ begin
 
 
      elsif(state = D) then                  --mem write back
-           if(ref_counter = 4) then
+           
+		   report "entering D";
+		   if(ref_counter = 4) then
 				ref_counter<=0;
 				mem_write<='0'; 
 				mem_read<='1';
@@ -148,37 +155,41 @@ begin
 			   mem_write <= '0';
           end if;
 
-   elsif(state = E)then
-       s_waitrequest<= '0';
-       State <= A;
+	   elsif(state = E)then
+		  report "entering E";
+		   s_waitrequest<= '0';
+		   State <= A;
+	   else
+			state <= A; --default state
+	   end if;
 
-   end if;
 
-
-if (m_waitrequest'event and m_waitrequest = '0' and m_reading='1') then  --the process waiting for a memory read finish, if done, then add the offset and pass to memory_read
-         m_reading <= '0';
-         cache(index)(ref_counter*32+b_counter*8+7 downto ref_counter*32+b_counter*8)<= m_readdata;
+	if (m_waitrequest'event and m_waitrequest = '0' and m_reading='1') then  --the process waiting for a memory read finish, if done, then add the offset and pass to memory_read
+			 m_reading <= '0';
+			 cache(index)(ref_counter*32+b_counter*8+7 downto ref_counter*32+b_counter*8)<= m_readdata;
         
-         mem_read <= '1';
-         if(b_counter = 3 ) then 
-                b_counter <=0;
-                ref_counter <= ref_counter+1;
-         else 
-                b_counter <= b_counter+1;
-         end if;  
+			 mem_read <= '1';
+			 if(b_counter = 3 ) then 
+					b_counter <=0;
+					ref_counter <= ref_counter+1;
+			 else 
+					b_counter <= b_counter+1;
+			 end if;  
 
-      elsif(m_waitrequest'event and m_waitrequest = '0' and m_writing='1')then  --the process waiting for a write back finish, if done, then add the offset and pass to memory_write
-         m_writing <= '0';
-         mem_write<='1';
-         if(b_counter = 3 ) then 
-                b_counter <=0;
-                ref_counter <= ref_counter+1;
+	elsif(m_waitrequest'event and m_waitrequest = '0' and m_writing='1')then  --the process waiting for a write back finish, if done, then add the offset and pass to memory_write
+			m_writing <= '0';
+			mem_write<='1';
+			if(b_counter = 3 ) then 
+					b_counter <=0;
+					ref_counter <= ref_counter+1;
                 
-         else 
-                b_counter <= b_counter+1;
-         end if;  
-      end if;
-if(reset'event and reset = '1')then  -- reset operation 
+			else 
+						b_counter <= b_counter+1;
+			end if;  
+	end if;
+end if;
+
+	if(reset'event and reset = '1')then  -- reset operation 
 
         mem_read<= '0';
         mem_write<='0';
@@ -186,8 +197,8 @@ if(reset'event and reset = '1')then  -- reset operation
         m_writing<='0';
 
      end if;
+
 end process;
- 
  
 
 m_addr<= m_address;
