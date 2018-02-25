@@ -9,7 +9,7 @@ architecture behavior of cache_tb is
 
 component cache is
 generic(
-    ram_size : INTEGER := 32768;
+    ram_size : INTEGER := 32768
 );
 port(
     clock : in std_logic;
@@ -116,7 +116,135 @@ test_process : process
 begin
 
 -- put your tests here
-	
+s_write<='0';
+s_read<='0';
+WAIT FOR clk_period;
+report "start";
+-- read data from memory 0-5
+--  in this test, the cache is empty so the data is not valid
+-- so it will perform miss and load data when read word 0,4, and hit at word 1,2,3,5;
+-------------------read word 0
+s_addr <= x"00000000";
+s_read<='1';
+report "sread is set ------------------------------";
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"03020100" report "read should be x03020100" severity error;
+s_read<='0';
+wait for clk_period;
+-------------------read word 1
+s_addr <= x"00000004";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"07060504" report "read should be x07060504" severity error;
+s_read<='0';
+wait for clk_period;
+-------------------read word 2
+s_addr <= x"00000008";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"0B0A0908" report "read should be x0B0A0908" severity error;
+s_read<='0';
+wait for clk_period;
+-------------------read word 3
+s_addr <= x"0000000C";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
+s_read<='0';
+wait for clk_period;
+-------------------read word 4
+s_addr <= x"00000010";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"13121110" report "read should be x13121110" severity error;
+s_read<='0';
+wait for clk_period;
+
+-------------------read word 5
+s_addr <= x"00000014";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"17161514" report "read should be x17161514" severity error;
+s_read<='0';
+wait for clk_period;
+--------------------read word 0-5 end
+---write to word 3 --------test a write hit !
+-- a write hit, and it will not access memory 
+s_addr <= x"0000000C";
+s_writedata<=X"AAAAAAAA";
+s_write<='1';
+wait until falling_edge(s_waitrequest);
+s_write<='0';
+wait for clk_period;
+--check result in word 3
+s_addr <= x"0000000C";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"AAAAAAAA" report "read should be xAAAAAAAA, write unsuccessful" severity error;
+s_read<='0';
+wait for clk_period;
+-----------write hit check end;
+
+---- read word 131 -------test a read miss with dirty
+-- the word is not in cache and it is dirty, so the block will be write back to memory first 
+-- and read from memory then, finally write content to cache
+s_addr <= x"0000020C";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
+s_read<='0';
+wait for clk_period;
+
+-- read word  256 ---------test a read miss without dirty
+-- without dirty, the cache will directly access memory and get data, then read it
+s_addr <= x"00000400";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"03020100" report "read should be x03020100" severity error;
+s_read<='0';
+wait for clk_period;
+
+----write to word 128 -- test a write miss without dirty 
+-- without dirty, the cache will directly access memory and get data, then write to it
+s_addr <= x"00000200";
+s_writedata<=X"CCCCCCCC";
+s_write<='1';
+wait until falling_edge(s_waitrequest);
+s_write<='0';
+wait for clk_period;
+
+s_addr <= x"00000200";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"CCCCCCCC" report "read should be xcccccccc, write unsuccessful" severity error;
+s_read<='0';
+wait for clk_period;
+
+
+------write to word 5 and 133 and read 133 --test a write miss with dirty
+-- with dirty, it will first write the data back to the memory, then transfer data 
+-- from memory to cache, then read it 
+s_addr <= x"00000014";
+s_writedata<=X"AAABBBBB";
+s_write<='1';
+wait until falling_edge(s_waitrequest);
+s_write<='0';
+wait for clk_period;
+
+s_addr <= x"00000214";
+s_writedata<=X"BBBBBBBB";
+s_write<='1';
+wait until falling_edge(s_waitrequest);
+s_write<='0';
+wait for clk_period;
+
+----read word 134
+s_addr <= x"00000214";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"BBBBBBBB" report "read should be xbbbbbbbb, write unsuccessful" severity error;
+s_read<='0';
+wait for clk_period;
 end process;
 	
 end;
