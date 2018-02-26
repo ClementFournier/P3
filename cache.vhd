@@ -76,10 +76,10 @@ architecture arch of cache is
 	--STATE A : Idle state : waiting for a read or write command from processor
 	--STATE B : Compare tags set to determine if it is a hit or a miss
 	--STATE C : Read memory state
-        --STATE D : Waiting for memory read
+    --STATE D : Waiting for memory read
 	--STATE E : write back state
 	--STATE F : Waiting for memory write
-      	--STATE F : signal CPU that operation is complete
+    --STATE F : signal CPU that operation is complete
 
  
   begin
@@ -110,7 +110,8 @@ architecture arch of cache is
           case state is
           ----------------------------------------------------------
           --CPU request state
-          when A =>          
+          when A =>
+			--report "A";
             if(s_read='1' or s_write='1') then
               state <= B;
             end if;
@@ -119,6 +120,7 @@ architecture arch of cache is
           --for hit: either write_back or read
           --for miss: go to state C or D depending on dirty bit
           when B =>
+		  --report "B";
             if(addr_tag = block_tag and valid='1') then
               if(s_read= '1') then
                 s_readdata <=  cache(index)(32*(to_integer(unsigned(addr_word_offset)))+31 downto 32*(to_integer(unsigned(addr_word_offset))));
@@ -138,6 +140,7 @@ architecture arch of cache is
           ------------------------------------------------------------
           --memory read state  
           when C =>
+		  --report "C";
             if(ref_counter = 4) then
               ref_counter <= 0;
               cache(index)(135)<='1';  --set valid
@@ -152,10 +155,12 @@ architecture arch of cache is
           --------------------------------------------------------------
           --Waiting for memory read
           when D =>
+		  --report "D";
             --nothing
           --------------------------------------------------------------
           --write back state
           when E =>
+		  --report "E";
             if(ref_counter = 4) then
               ref_counter <= 0;
               state <= C;
@@ -168,6 +173,7 @@ architecture arch of cache is
           --------------------------------------------------------------
           --Waiting for memory write
           when F =>
+		  --report "F";
             --nothing
           --------------------------------------------------------------
           when others =>

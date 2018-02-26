@@ -114,40 +114,193 @@ end process;
 
 test_process : process
 begin
+	
+	--set default values (0)
+	s_addr <= x"00000000";
+    s_read <= '0';
+    s_write <= '0';
+    s_writedata <= x"00000000";
+
+	wait for clk_period;
 
   -- put your tests here
-  report "Testsuite2: 4 test cases: test write hit, read miss with dirty and without dirty and write miss with dirty and without dirty";
-  report "Test1: write to word 3 --------test a write hit ! ";
 
-  -- a write hit, and it will not access memory 
-  s_addr <= x"0000000C";
-  s_writedata<=X"AAAAAAAA";
-  s_write<='1';
-  wait until falling_edge(s_waitrequest);
-  s_write<='0';
-  wait for clk_period;
-  --check result in word 3
-  s_addr <= x"0000000C";
-  s_read<='1';
-  wait until falling_edge(s_waitrequest);
-  assert s_readdata<=x"AAAAAAAA" report "read should be xAAAAAAAA, write unsuccessful" severity error;
-  s_read<='0';
-  wait for clk_period;
-  report "------------------------------------------------------------";
+	report "READ TESTS (MISSES)";
 
-  report "start";
-  report "Test2: test a read miss with dirty ";
-  ---- read word 131 -------test a read miss with dirty
-  -- the word is not in cache and it is dirty, so the block will be write back to memory first 
-  -- and read from memory then, finally write content to cache
-  s_addr <= x"0000020C";
-  s_read<='1';
-  wait until falling_edge(s_waitrequest);
-  assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
-  s_read<='0';
-  wait for clk_period;
-  report "------------------------------------------------------------";
+	--read word 3
+	s_addr <= x"0000000C";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
+	s_read<='0';
+	wait for clk_period;
 
+	--read word 4
+	s_addr <= x"00000010";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"13121110" report "read should be x13121110" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+
+
+	report"READ TESTS (HITS)";
+
+	--read word 3
+	s_addr <= x"0000000C";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
+	s_read<='0';
+	wait for clk_period;
+
+	--read word 4
+	s_addr <= x"00000010";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"13121110" report "read should be x13121110" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+
+	report"WRITE TEST (HIT)";
+
+	--write to word 3
+	s_addr <= x"0000000C";
+	s_writedata<=X"AAAAAAAA";
+	s_write<='1';
+	wait until falling_edge(s_waitrequest);
+	s_write<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+	--check result in word 3
+	report "Reading memory to check previous writing";
+    s_addr <= x"0000000C";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"AAAAAAAA" report "read should be xAAAAAAAA" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+	report"WRITE TEST DIRTY";
+
+	--write to word 3
+	s_addr <= x"0000000C";
+	s_writedata<=X"AABBBBAA";
+	s_write<='1';
+	wait until falling_edge(s_waitrequest);
+	s_write<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+	--check result in word 3
+	report "Reading memory to check previous writing";
+    s_addr <= x"0000000C";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"AABBBBAA" report "read should be xAABBBBAA" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+
+	report"WRITE TEST INVALID";
+
+	--write to word 5
+	s_addr <= x"00000014";
+	s_writedata<=X"AABCCBAA";
+	s_write<='1';
+	wait until falling_edge(s_waitrequest);
+	s_write<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+
+	--check result in word 5
+	report "Reading memory to check previous writing";
+    s_addr <= x"00000014";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"AABCCBAA" report "read should be xAABCCBAA" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+	
+
+
+	report "INVALID TAG READ";
+
+    s_addr <= x"0D000014";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"AABCCBAA" report "read should be xAABCCBAA" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+	report"INVALID TAG WRITE";
+
+	--write to word 3
+	s_addr <= x"0D00000C";
+	s_writedata<=X"0CC00CC0";
+	s_write<='1';
+	wait until falling_edge(s_waitrequest);
+	s_write<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+	--check result in word 3
+	report "Reading memory to check previous writing";
+    s_addr <= x"0000000C";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"0CC00CC0" report "read should be x0CC00CC0" severity error;
+	s_read<='0';
+	wait for clk_period;
+	report "------------------------------------------------------------";
+
+
+
+	report "READ MISS 2";
+	s_addr <= x"00000004";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"07060504" report "read should be x07060504" severity error;
+	s_read<='0';
+	wait for clk_period;
+
+
+	report "READ HIT 2";
+	s_addr <= x"00000004";
+	s_read<='1';
+	wait until falling_edge(s_waitrequest);
+	assert s_readdata<=x"07060504" report "read should be x07060504" severity error;
+	s_read<='0';
+	wait for clk_period;
+
+	wait;
 
 
 end process;

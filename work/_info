@@ -7,13 +7,13 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-dC:/Users/Clem/Desktop/P3
+Z0 dC:/Users/Clem/Desktop/P3
 Ecache
-Z0 w1519635595
-Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
-Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
-Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
-Z4 dC:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3
+Z1 w1519659883
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
 Z5 8cache.vhd
 Z6 Fcache.vhd
 l0
@@ -22,23 +22,23 @@ VU6A1`BRI@XlB5RbWbHB=?0
 !s100 C<;HKM7M38>>4jE0Q0h@Q2
 Z7 OP;C;10.4a;61
 32
-Z8 !s110 1519635607
+Z8 !s110 1519663892
 !i10b 1
-Z9 !s108 1519635607.000000
+Z9 !s108 1519663892.000000
 Z10 !s90 -reportprogress|300|cache.vhd|
 Z11 !s107 cache.vhd|
 !i113 1
 o-O0
 Z12 tExplicit 1
 Aarch
-R1
 R2
 R3
+R4
 DEx4 work 5 cache 0 22 U6A1`BRI@XlB5RbWbHB=?0
 l85
 L30
-VA1N=V5TiG1<?DK8VO<9cL3
-!s100 aH9cI:ADGdP]=OY6EmC3c2
+VhG^a7c2ScGHkE;Rb7K`HK3
+!s100 k53l:MY^Oj0K9=;n6h^k>3
 R7
 32
 R8
@@ -50,11 +50,11 @@ R11
 o-O0
 R12
 Ecache_tb
-Z13 w1519625151
-R1
+Z13 w1519663886
 R2
 R3
 R4
+R0
 Z14 8cache_tb.vhd
 Z15 Fcache_tb.vhd
 l0
@@ -72,14 +72,14 @@ Z17 !s107 cache_tb.vhd|
 o-O0
 R12
 Abehavior
-R1
 R2
 R3
+R4
 DEx4 work 8 cache_tb 0 22 UfG9XTOHD=MfZ2FL?jNlL1
 l71
 L8
-VhAJ<_Jd=UacZgJP<5jNI;2
-Z18 !s100 h?b>oafBJZILbh7[l@hf01
+VH73b:d0c>XBJR[h8gCTjO1
+!s100 >AibWAaJY5g1nJGle`GYN1
 R7
 32
 R8
@@ -91,84 +91,84 @@ R17
 o-O0
 R12
 Ememory
-Z19 w1519536134
-R1
+Z18 w1519653620
 R2
 R3
 R4
-Z20 8C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory.vhd
-Z21 FC:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory.vhd
+R0
+Z19 8memory.vhd
+Z20 Fmemory.vhd
 l0
 L6
-VXZ]cf0d6L]_C_E8RoC]K:0
+V`jFEc]cT[GXAlUe:b5^>o0
 !s100 TL`MNK5NTn0=f?i`Ph2JS3
 R7
 32
-Z22 !s110 1519635603
+Z21 !s110 1519663893
 !i10b 1
-Z23 !s108 1519635603.000000
-Z24 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory.vhd|
-Z25 !s107 C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory.vhd|
+Z22 !s108 1519663893.000000
+Z23 !s90 -reportprogress|300|memory.vhd|
+Z24 !s107 memory.vhd|
 !i113 1
-Z26 o-work work -2002 -explicit -O0
+o-O0
 R12
 Artl
-R1
-R2
-R3
-DEx4 work 6 memory 0 22 XZ]cf0d6L]_C_E8RoC]K:0
-l29
-L23
-VZYGaXIV0Gf7CaLFm<8F0e3
-!s100 Fl5=Y6J][VGa6l_6YBKG33
-R7
-32
-R22
-!i10b 1
-R23
-R24
-R25
-!i113 1
-R26
-R12
-Ememory_tb
-R19
-R1
 R2
 R3
 R4
-Z27 8C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd
-Z28 FC:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd
+DEx4 work 6 memory 0 22 `jFEc]cT[GXAlUe:b5^>o0
+l29
+L23
+V=XkLAmWaEeXCehT@OAj[`0
+!s100 Fl5=Y6J][VGa6l_6YBKG33
+R7
+32
+R21
+!i10b 1
+R22
+R23
+R24
+!i113 1
+o-O0
+R12
+Ememory_tb
+R18
+R2
+R3
+R4
+R0
+Z25 8memory_tb.vhd
+Z26 Fmemory_tb.vhd
 l0
 L5
-VOFWa0hoOXUfk6Uo;zEB1J0
+V4>]m9FnDc5EMe07:icRQm0
 !s100 K:h_7;_e46:2;TAj@4dAB3
 R7
 32
-Z29 !s110 1519635604
+R21
 !i10b 1
-R23
-Z30 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd|
-Z31 !s107 C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd|
+R22
+Z27 !s90 -reportprogress|300|memory_tb.vhd|
+Z28 !s107 memory_tb.vhd|
 !i113 1
-R26
+o-O0
 R12
 Abehaviour
-R1
 R2
 R3
-DEx4 work 9 memory_tb 0 22 OFWa0hoOXUfk6Uo;zEB1J0
+R4
+Z29 DEx4 work 9 memory_tb 0 22 4>]m9FnDc5EMe07:icRQm0
 l38
 L8
-VIXdF36YTU[c7>TmzkA>B[3
-!s100 :i96VH_8DL4G91ZkR7MdH1
+Z30 V?C:Dl2`4WigaAU1d>klB71
+Z31 !s100 :i96VH_8DL4G91ZkR7MdH1
 R7
 32
-R29
+R21
 !i10b 1
-R23
-R30
-R31
+R22
+R27
+R28
 !i113 1
-R26
+o-O0
 R12

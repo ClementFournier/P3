@@ -15,6 +15,8 @@ vlib work
 ;# Compile components if any
 vcom cache.vhd
 vcom cache_tb.vhd
+vcom memory.vhd
+vcom memory_tb.vhd
 
 ;# Start simulation
 vsim cache_tb
