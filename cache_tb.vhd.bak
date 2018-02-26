@@ -115,38 +115,38 @@ end process;
 test_process : process
 begin
 
-  -- put your tests here
-  report "Testsuite2: 4 test cases: test write hit, read miss with dirty and without dirty and write miss with dirty and without dirty";
-  report "Test1: write to word 3 --------test a write hit ! ";
+-- put your tests here
+report "Testsuite2: 4 test cases: test write hit, read miss with dirty and without dirty and write miss with dirty and without dirty";
+report "Test1: write to word 3 --------test a write hit ! ";
 
-  -- a write hit, and it will not access memory 
-  s_addr <= x"0000000C";
-  s_writedata<=X"AAAAAAAA";
-  s_write<='1';
-  wait until falling_edge(s_waitrequest);
-  s_write<='0';
-  wait for clk_period;
-  --check result in word 3
-  s_addr <= x"0000000C";
-  s_read<='1';
-  wait until falling_edge(s_waitrequest);
-  assert s_readdata<=x"AAAAAAAA" report "read should be xAAAAAAAA, write unsuccessful" severity error;
-  s_read<='0';
-  wait for clk_period;
-  report "------------------------------------------------------------";
+-- a write hit, and it will not access memory 
+s_addr <= x"0000000C";
+s_writedata<=X"AAAAAAAA";
+s_write<='1';
+wait until falling_edge(s_waitrequest);
+s_write<='0';
+wait for clk_period;
+--check result in word 3
+s_addr <= x"0000000C";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"AAAAAAAA" report "read should be xAAAAAAAA, write unsuccessful" severity error;
+s_read<='0';
+wait for clk_period;
+report "------------------------------------------------------------";
 
-  report "start";
-  report "Test2: test a read miss with dirty ";
-  ---- read word 131 -------test a read miss with dirty
-  -- the word is not in cache and it is dirty, so the block will be write back to memory first 
-  -- and read from memory then, finally write content to cache
-  s_addr <= x"0000020C";
-  s_read<='1';
-  wait until falling_edge(s_waitrequest);
-  assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
-  s_read<='0';
-  wait for clk_period;
-  report "------------------------------------------------------------";
+report "start";
+report "Test2: test a read miss with dirty ";
+---- read word 131 -------test a read miss with dirty
+-- the word is not in cache and it is dirty, so the block will be write back to memory first 
+-- and read from memory then, finally write content to cache
+s_addr <= x"0000020C";
+s_read<='1';
+wait until falling_edge(s_waitrequest);
+assert s_readdata<=x"0F0E0D0C" report "read should be x0F0E0D0C" severity error;
+s_read<='0';
+wait for clk_period;
+report "------------------------------------------------------------";
 
 
 

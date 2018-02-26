@@ -136,9 +136,9 @@ architecture arch of cache is
               end if;
             else
               if( dirty ='1') then
-                state <= D;
-              else
                 state <= C;
+              else
+                state <= D;
               end if;
             end if;
           ------------------------------------------------------------
