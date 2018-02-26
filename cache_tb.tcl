@@ -28,5 +28,7 @@ AddWaves
 ;# Running and breakpoints
 #bp cache_tb.vhd 266
 #bp cache_tb.vhd 123
+#bp cache.vhd 187
+#bp cache.vhd 200
 #run 500 ns
-run 600 ns
+run 542 ns

@@ -9,7 +9,7 @@ z2
 cModel Technology
 dC:/Users/Clem/Desktop/P3
 Ecache
-Z0 w1519628585
+Z0 w1519635595
 Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -22,9 +22,9 @@ VU6A1`BRI@XlB5RbWbHB=?0
 !s100 C<;HKM7M38>>4jE0Q0h@Q2
 Z7 OP;C;10.4a;61
 32
-Z8 !s110 1519630748
+Z8 !s110 1519635607
 !i10b 1
-Z9 !s108 1519630748.000000
+Z9 !s108 1519635607.000000
 Z10 !s90 -reportprogress|300|cache.vhd|
 Z11 !s107 cache.vhd|
 !i113 1
@@ -35,10 +35,10 @@ R1
 R2
 R3
 DEx4 work 5 cache 0 22 U6A1`BRI@XlB5RbWbHB=?0
-l88
+l85
 L30
-Vel>^1Rc9onMeIm=ZRgOHB0
-!s100 =?8nmcBf:3ZC>X`K`5K>C3
+VA1N=V5TiG1<?DK8VO<9cL3
+!s100 aH9cI:ADGdP]=OY6EmC3c2
 R7
 32
 R8
@@ -104,9 +104,9 @@ VXZ]cf0d6L]_C_E8RoC]K:0
 !s100 TL`MNK5NTn0=f?i`Ph2JS3
 R7
 32
-Z22 !s110 1519630744
+Z22 !s110 1519635603
 !i10b 1
-Z23 !s108 1519630744.000000
+Z23 !s108 1519635603.000000
 Z24 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory.vhd|
 Z25 !s107 C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory.vhd|
 !i113 1
@@ -145,11 +145,11 @@ VOFWa0hoOXUfk6Uo;zEB1J0
 !s100 K:h_7;_e46:2;TAj@4dAB3
 R7
 32
-R22
+Z29 !s110 1519635604
 !i10b 1
 R23
-Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd|
-Z30 !s107 C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd|
+Z30 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd|
+Z31 !s107 C:/Users/Ango/OneDrive/Documents/Ecse 425/Project/WORKSPACE/Github/P3/memory_tb.vhd|
 !i113 1
 R26
 R12
@@ -164,11 +164,11 @@ VIXdF36YTU[c7>TmzkA>B[3
 !s100 :i96VH_8DL4G91ZkR7MdH1
 R7
 32
-R22
+R29
 !i10b 1
 R23
-R29
 R30
+R31
 !i113 1
 R26
 R12

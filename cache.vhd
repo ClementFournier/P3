@@ -56,11 +56,6 @@ architecture arch of cache is
   signal valid: std_logic := '0';
   signal dirty: std_logic := '0';
 
-  signal mem_read: std_logic:= '0';
-  signal mem_write: std_logic:='0';
-  signal m_reading: std_logic:='0';
-  signal m_writing: std_logic:='0';
-
   --byte counters
   signal ref_counter : integer := 0;
   signal b_counter : integer := 0;
@@ -74,15 +69,17 @@ architecture arch of cache is
   --memory signals
   signal m_address: integer range 0 to ram_size-1;
 
-  TYPE State_type IS (A, B, C, D, E);  -- Define the states
+  TYPE State_type IS (A, B, C, D, E, F, G);  -- Define the states
   SIGNAL state : State_Type;    -- Create a signal
 
 	--LIST OF STATES
 	--STATE A : Idle state : waiting for a read or write command from processor
 	--STATE B : Compare tags set to determine if it is a hit or a miss
-	--STATE C : Read memory state (occurs after a miss in cache)
-	--STATE D : write back state (occurs after a dirty miss)
-	--STATE E : signal CPU that operation is complete
+	--STATE C : Read memory state
+        --STATE D : Waiting for memory read
+	--STATE E : write back state
+	--STATE F : Waiting for memory write
+      	--STATE F : signal CPU that operation is complete
 
  
   begin
@@ -103,10 +100,7 @@ architecture arch of cache is
     process(clock,m_waitrequest,reset)
       begin
         if (reset'event and reset = '1') then
-          mem_read<= '0';
-          mem_write<= '0';
-          m_reading<='0';
-          m_writing<='0';
+          state<=A;
     
         elsif (rising_edge(clock) ) then
           s_waitrequest<='1';
@@ -128,15 +122,15 @@ architecture arch of cache is
             if(addr_tag = block_tag and valid='1') then
               if(s_read= '1') then
                 s_readdata <=  cache(index)(32*(to_integer(unsigned(addr_word_offset)))+31 downto 32*(to_integer(unsigned(addr_word_offset))));
-                state <= E;  --signal CPU
+                state <= G;  --signal CPU
               elsif(s_write= '1') then
                 cache(index)(32*(to_integer(unsigned(addr_word_offset)))+31 downto 32*(to_integer(unsigned(addr_word_offset)))) <= s_writedata;
                 cache(index)(134)<= '1';
-                state <= E;  --signal CPU
+                state <= G;  --signal CPU
               end if;
             else
               if( dirty ='1') then
-                state <= D;
+                state <= E;
               else
                 state <= C;
               end if;
@@ -152,46 +146,48 @@ architecture arch of cache is
               State <= B;
             else
               m_read<='1';
-              m_reading <= '1';
               m_address <=((to_integer(unsigned(addr_tag))*512)+(to_integer(unsigned(addr_index))*16)+ref_counter*4+b_counter);		
-              mem_read<='0';
+              state <= D;
             end if;
           --------------------------------------------------------------
-          --write back state
+          --Waiting for memory read
           when D =>
+            --nothing
+          --------------------------------------------------------------
+          --write back state
+          when E =>
             if(ref_counter = 4) then
               ref_counter <= 0;
-              mem_write<='0';
-              mem_read<='1';
+              state <= C;
             else
               m_write <= '1';
-              m_writing <= '1';
               m_address <= ((to_integer(unsigned(block_tag))*512)+(to_integer(unsigned(addr_index))*16)+ref_counter*4+b_counter);
               m_writedata <= cache(index) ((ref_counter*32 + b_counter*8 + 7) downto (ref_counter*32 + b_counter*8));
-              mem_write <= '0';
+              state <= F;
             end if;     
           --------------------------------------------------------------
-          --when E =>
-          --  s_waitrequest<= '0';
-          --  State <= A;
-
+          --Waiting for memory write
+          when F =>
+            --nothing
+          --------------------------------------------------------------
           when others =>
             state <= A; --default state
           
           end case;
 
         elsif(falling_edge(clock)) then
-	  if (state = E) then
+	  if (state = G) then
             s_waitrequest<= '0';
             state<=A;
           end if;
         end if;
         
         --the process waiting for a memory read finish, if done, then add the offset and pass to memory_read 
-        if (m_waitrequest'event and m_waitrequest = '0' and m_reading='1') then 
-          m_reading <= '0';
+        if (m_waitrequest'event and m_waitrequest = '0' and state=D) then 
+          state <= C;
+
           cache(index)(ref_counter*32+b_counter*8+7 downto ref_counter*32+b_counter*8)<= m_readdata;
-          mem_read <= '1';
+
           if(b_counter = 3 ) then 
              b_counter <=0;
              ref_counter <= ref_counter+1;
@@ -200,9 +196,8 @@ architecture arch of cache is
           end if;
 
         --the process waiting for a write back finish, if done, then add the offset and pass to memory_write
-        elsif (m_waitrequest'event and m_waitrequest = '0' and m_writing='1')then
-          m_writing <= '0';
-          mem_write<='1';
+        elsif (m_waitrequest'event and m_waitrequest = '0' and state=F)then
+          state <= E;
           if(b_counter = 3 ) then 
             b_counter <=0;
             ref_counter <= ref_counter+1;
